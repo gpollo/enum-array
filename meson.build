@@ -28,7 +28,9 @@ libfpm_dep = declare_dependency(
 # tests #
 #########
 
-subdir('tests')
+if not meson.is_subproject()
+    subdir('tests')
+endif
 
 #################
 # format target #
