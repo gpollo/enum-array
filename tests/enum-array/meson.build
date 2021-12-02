@@ -43,32 +43,32 @@ test('fpm/enum-array/compile-failure-order',
     ],
 )
 
-test('fpm/enum-array/different-constructors',
-    executable('test-different-constructors', ['different-constructors.cpp'],
+test('fpm/enum-array/safe-init-different-constructors',
+    executable('test-safe-init-different-constructors', ['safe-init-different-constructors.cpp'],
         dependencies: libfpm_dep,
     ),
 )
 
-test('fpm/enum-array/non-copyable',
-    executable('test-non-copyable', ['non-copyable.cpp'],
+test('fpm/enum-array/safe-init-non-copyable',
+    executable('test-safe-init-non-copyable', ['safe-init-non-copyable.cpp'],
         dependencies: libfpm_dep,
     ),
 )
 
-test('fpm/enum-array/object-attribute',
-    executable('test-object-attribute', ['object-attribute.cpp'],
+test('fpm/enum-array/safe-init-object-attribute',
+    executable('test-safe-init-object-attribute', ['safe-init-object-attribute.cpp'],
         dependencies: libfpm_dep,
     ),
 )
 
-test('fpm/enum-array/object',
-    executable('test-object', ['object.cpp'],
+test('fpm/enum-array/safe-init-object',
+    executable('test-safe-init-object', ['safe-init-object.cpp'],
         dependencies: libfpm_dep,
     ),
 )
 
-test('fpm/enum-array/simple',
-    executable('test-simple', ['simple.cpp'],
+test('fpm/enum-array/safe-init-simple',
+    executable('test-safe-init-simple', ['safe-init-simple.cpp'],
         dependencies: libfpm_dep,
     ),
 )
