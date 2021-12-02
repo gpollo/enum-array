@@ -43,6 +43,12 @@ test('fpm/enum-array/compile-failure-order',
     ],
 )
 
+test('fpm/enum-array/different-constructors',
+    executable('test-different-constructors', ['different-constructors.cpp'],
+        dependencies: libfpm_dep,
+    ),
+)
+
 test('fpm/enum-array/non-copyable',
     executable('test-non-copyable', ['non-copyable.cpp'],
         dependencies: libfpm_dep,
