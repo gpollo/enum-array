@@ -1,6 +1,7 @@
 #ifndef INCLUDE_FPM_ENUM_ARRAY_HPP
 #define INCLUDE_FPM_ENUM_ARRAY_HPP
 
+#include <algorithm>
 #include <array>
 #include <tuple>
 #include <utility>
@@ -129,6 +130,10 @@ class enum_array {
      */
     const V& operator[](K key) const noexcept {
         return do_not_use_me_directly_[static_cast<unsigned int>(key)];
+    }
+
+    void fill(V value) noexcept {
+        std::fill(do_not_use_me_directly_.begin(), do_not_use_me_directly_.end(), value);
     }
 
    private:
