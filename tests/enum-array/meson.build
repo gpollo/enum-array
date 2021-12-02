@@ -1,5 +1,3 @@
-cpp = meson.get_compiler('cpp')
-
 test('fpm/enum-array/compile-failure-duplicate',
     compile_sh,
     args: [
@@ -43,6 +41,12 @@ test('fpm/enum-array/compile-failure-order',
         '--include',
         '@0@'.format(meson.source_root() / 'subprojects/libmagic-enum/magic_enum/include/'),
     ],
+)
+
+test('fpm/enum-array/non-copyable',
+    executable('test-non-copyable', ['non-copyable.cpp'],
+        dependencies: libfpm_dep,
+    ),
 )
 
 test('fpm/enum-array/object-attribute',

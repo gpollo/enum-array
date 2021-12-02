@@ -6,7 +6,12 @@ enum class test { VALUE_1, VALUE_2, VALUE_3, VALUE_4, VALUE_5, VALUE_6 };
 
 class obj {
    public:
+    obj() = delete;
     obj(int a, int b) : a_(a), b_(b) {}
+    obj(const obj& other) = delete;
+    obj(obj&& other)      = delete;
+    obj& operator=(const obj& other) = delete;
+    obj& operator=(obj&& other) = delete;
 
     int sum() const {
         return a_ + b_;

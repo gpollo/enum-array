@@ -43,19 +43,34 @@ namespace fpm {
  * [1] https://github.com/Neargye/magic_enum/blob/master/doc/limitations.md
  */
 template <typename K, typename V>
-class enum_array : public std::array<V, magic_enum::enum_count<K>()> {
+class enum_array {
    private:
     static constexpr auto KEYS      = magic_enum::enum_values<K>();
     static constexpr auto KEY_COUNT = magic_enum::enum_count<K>();
     static constexpr auto N         = KEY_COUNT;
 
-    template <K Key, typename... Args>
+    template <K Key, typename... ConstructorArgs>
     struct param_tuple {
-        std::tuple<Args...> args_;
-        param_tuple(std::tuple<Args...>&& args) : args_(std::move(args)) {}
+        std::tuple<ConstructorArgs...> constructor_args_;
+
+        param_tuple(std::tuple<ConstructorArgs...>&& constructor_args)
+            : constructor_args_(std::move(constructor_args)) {}
+
+        /**
+         * The implicit conversion is what calls the constructor.
+         */
+        operator V() {
+            return std::make_from_tuple<V>(constructor_args_);
+        }
     };
 
    public:
+    /**
+     * Inner data of the enumeration array. It should be private, but it breaks
+     * safe initialisation in some cases. It should never be use directly.
+     */
+    std::array<V, N> do_not_use_me_directly_;
+
     /**
      * This method insures that all key-value pairs have been initialized
      * and that there are no duplicate key. The checks are at compile-time.
@@ -88,54 +103,53 @@ class enum_array : public std::array<V, magic_enum::enum_count<K>()> {
      *                                 enum_array::param<test::VALUE_6>{6});
      * ```
      */
-    template <typename... Args>
-    static enum_array<K, V> safe_init(Args... args) {
-        enum_array<K, V> array;
-
+    template <typename... ExpectedParams>
+    static enum_array<K, V> safe_init(ExpectedParams... expected_params) {
         using finished = std::integral_constant<bool, 0U == KEY_COUNT>;
-        init_array<0U>(finished(), array, args...);
-
-        return array;
+        return impl_safe_init<0U>(finished(), expected_params...);
     }
 
     /**
      * Returns a parameter for the safe initialisation.
      */
-    template <K Key, typename... Params>
-    static param_tuple<Key, Params...> param(Params&&... args) {
-        return param_tuple<Key, Params...>(std::forward_as_tuple(args...));
+    template <K Key, typename... ConstructorArgs>
+    static param_tuple<Key, ConstructorArgs...> param(ConstructorArgs&&... constructor_args) {
+        return param_tuple<Key, ConstructorArgs...>(std::forward_as_tuple(constructor_args...));
     }
 
     /**
      * Returns a reference to the element at with the specified key.
      */
     V& operator[](K key) noexcept {
-        return static_cast<std::array<V, N>&>(*this)[static_cast<unsigned int>(key)];
+        return do_not_use_me_directly_[static_cast<unsigned int>(key)];
     }
 
     /**
      * Returns a constant reference to the element at with the specified key.
      */
     const V& operator[](K key) const noexcept {
-        return static_cast<const std::array<V, N>&>(*this)[static_cast<unsigned int>(key)];
+        return do_not_use_me_directly_[static_cast<unsigned int>(key)];
     }
 
    private:
     /* safe initialisation implementation */
 
-    template <unsigned int I, typename... Params>
-    using expected_param = param_tuple<KEYS[I], Params...>;
+    template <unsigned int I, typename... ConstructorArgs>
+    using expected = const param_tuple<KEYS[I], ConstructorArgs...>&;
 
-    template <unsigned int I>
-    static void init_array(std::true_type /* finished */, std::array<V, N>& array) {}
+    template <unsigned int I, typename... Converters>
+    static enum_array<K, V> impl_safe_init(std::true_type /* finished */, Converters... converters) {
+        return enum_array<K, V>{{converters...}};
+    }
 
-    template <unsigned int I, typename... Args, typename... Params>
-    static void init_array(std::false_type /* finished */, std::array<V, N>& array,
-                           const expected_param<I, Params...>& param, Args... args) {
-        array[I] = std::make_from_tuple<V>(param.args_);
-
-        using finished = std::integral_constant<bool, I + 1 == KEY_COUNT>;
-        init_array<I + 1>(finished(), array, args...);
+    template <unsigned int I, typename... ConstructorArgs, typename... OtherConstructorArgs, typename... Converters>
+    static enum_array<K, V> impl_safe_init(std::false_type /* finished */,
+                                           expected<I, ConstructorArgs...> current_constructor_args,
+                                           OtherConstructorArgs... other_constructor_args,
+                                           Converters... generated_converters) {
+        using finished = std::integral_constant<bool, I + 1U == KEY_COUNT>;
+        return impl_safe_init<I + 1U>(
+            finished(), other_constructor_args..., generated_converters..., current_constructor_args);
     }
 };
 
