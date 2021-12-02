@@ -156,6 +156,39 @@ class enum_array {
         return impl_safe_init<I + 1U>(
             finished(), other_constructor_args..., generated_converters..., current_constructor_args);
     }
+
+   public:
+    class iterator {
+       public:
+        using iterator_category = std::forward_iterator_tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = V;
+        using pointer           = V*;
+        using reference         = V&;
+
+        iterator(pointer ptr) : ptr_(ptr) {}
+
+        /* clang-format off */
+        reference operator* () const { return *ptr_; }
+        pointer   operator->()       { return ptr_; }
+        iterator& operator++()       { ptr_++; return *this; }  
+        iterator  operator++(int)    { iterator tmp = *this; ++(*this); return tmp; }
+
+        friend bool operator== (const iterator& a, const iterator& b) { return a.ptr_ == b.ptr_; };
+        friend bool operator!= (const iterator& a, const iterator& b) { return a.ptr_ != b.ptr_; };
+        /* clang-format on */
+
+       private:
+        pointer ptr_;
+    };
+
+    iterator begin() {
+        return iterator(&do_not_use_me_directly_[0]);
+    }
+
+    iterator end() {
+        return iterator(&do_not_use_me_directly_[N]);
+    }
 };
 
 } /* namespace fpm */

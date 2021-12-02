@@ -43,6 +43,12 @@ test('fpm/enum-array/compile-failure-order',
     ],
 )
 
+test('fpm/enum-array/iterator-simple',
+    executable('test-iterator-simple', ['iterator-simple.cpp'],
+        dependencies: libfpm_dep,
+    ),
+)
+
 test('fpm/enum-array/safe-init-different-constructors',
     executable('test-safe-init-different-constructors', ['safe-init-different-constructors.cpp'],
         dependencies: libfpm_dep,
