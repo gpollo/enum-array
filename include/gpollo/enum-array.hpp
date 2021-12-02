@@ -1,5 +1,5 @@
-#ifndef INCLUDE_FPM_ENUM_ARRAY_HPP
-#define INCLUDE_FPM_ENUM_ARRAY_HPP
+#ifndef INCLUDE_GPOLLO_ENUM_ARRAY_HPP
+#define INCLUDE_GPOLLO_ENUM_ARRAY_HPP
 
 #include <algorithm>
 #include <array>
@@ -8,7 +8,7 @@
 
 #include <magic_enum.hpp>
 
-namespace fpm {
+namespace gpollo {
 
 /**
  * This data structure defines an array where the key is a enumeration
@@ -34,7 +34,7 @@ namespace fpm {
  * ```
  * enum class module { ... };
  * enum class temp { ... };
- * fpm::enum_array<module, std::enum_array<temp, data_type>> array;
+ * gpollo::enum_array<module, std::enum_array<temp, data_type>> array;
  * ```
  *
  * You can still access an element like this `array[m][t]`, but now `m`
@@ -78,7 +78,7 @@ class enum_array {
      *
      * ```
      * enum class test { VALUE_1, VALUE_2, VALUE_3, VALUE_4, VALUE_5, VALUE_6 };
-     * using enum_array = fpm::enum_array<test, int>;
+     * using enum_array = gpollo::enum_array<test, int>;
      *
      * // will compile
      * auto a1 = enum_array::safe_init(enum_array::param<test::VALUE_1>{1},
@@ -191,6 +191,6 @@ class enum_array {
     }
 };
 
-} /* namespace fpm */
+} /* namespace gpollo */
 
-#endif /* INCLUDE_FPM_ENUM_ARRAY_HPP */
+#endif /* INCLUDE_GPOLLO_ENUM_ARRAY_HPP */

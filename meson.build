@@ -1,5 +1,5 @@
 project(
-    'libfpm', ['cpp'],
+    'libenum-array', ['cpp'],
     default_options: ['cpp_std=c++17']
 )
 
@@ -11,14 +11,14 @@ libmagic_enum_subproject = subproject('libmagic-enum')
 
 libmagic_enum_dep = libmagic_enum_subproject.get_variable('magic_enum_dep')
 
-##########
-# libfpm #
-##########
+#################
+# libenum-array #
+#################
 
-libfpm_include = include_directories('include')
+libenum_array_include = include_directories('include')
 
-libfpm_dep = declare_dependency(
-    include_directories: libfpm_include,
+libenum_array_dep = declare_dependency(
+    include_directories: libenum_array_include,
     dependencies: libmagic_enum_dep,
 )
 

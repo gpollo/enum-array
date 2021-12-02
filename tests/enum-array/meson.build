@@ -1,4 +1,4 @@
-test('fpm/enum-array/compile-failure-duplicate',
+test('gpollo/enum-array/compile-failure-duplicate',
     compile_sh,
     args: [
         '--expect-failure',
@@ -13,7 +13,7 @@ test('fpm/enum-array/compile-failure-duplicate',
     ],
 )
 
-test('fpm/enum-array/compile-failure-missing',
+test('gpollo/enum-array/compile-failure-missing',
     compile_sh,
     args: [
         '--expect-failure',
@@ -28,7 +28,7 @@ test('fpm/enum-array/compile-failure-missing',
     ],
 )
 
-test('fpm/enum-array/compile-failure-order',
+test('gpollo/enum-array/compile-failure-order',
     compile_sh,
     args: [
         '--expect-failure',
@@ -43,26 +43,26 @@ test('fpm/enum-array/compile-failure-order',
     ],
 )
 
-test('fpm/enum-array/iterator-simple',
+test('gpollo/enum-array/iterator-simple',
     executable('test-iterator-simple', ['iterator-simple.cpp'],
-        dependencies: libfpm_dep,
+        dependencies: libenum_array_dep,
     ),
 )
 
-test('fpm/enum-array/safe-init-different-constructors',
+test('gpollo/enum-array/safe-init-different-constructors',
     executable('test-safe-init-different-constructors', ['safe-init-different-constructors.cpp'],
-        dependencies: libfpm_dep,
+        dependencies: libenum_array_dep,
     ),
 )
 
 safe_init_large_object = executable('test-safe-init-large-object', ['safe-init-large-object.cpp'],
-    dependencies: libfpm_dep,
+    dependencies: libenum_array_dep,
     cpp_args: ['-fcallgraph-info=su', '-save-temps=cwd']
 )
 
-test('fpm/enum-array/safe-init-large-object', safe_init_large_object)
+test('gpollo/enum-array/safe-init-large-object', safe_init_large_object)
 
-test('fpm/enum-array/safe-init-large-object-check-stack',
+test('gpollo/enum-array/safe-init-large-object-check-stack',
     check_stack_usage_sh,
     args: [
         '--callgraph-file',
@@ -77,26 +77,26 @@ test('fpm/enum-array/safe-init-large-object-check-stack',
     depends: safe_init_large_object,
 )
 
-test('fpm/enum-array/safe-init-non-copyable',
+test('gpollo/enum-array/safe-init-non-copyable',
     executable('test-safe-init-non-copyable', ['safe-init-non-copyable.cpp'],
-        dependencies: libfpm_dep,
+        dependencies: libenum_array_dep,
     ),
 )
 
-test('fpm/enum-array/safe-init-object-attribute',
+test('gpollo/enum-array/safe-init-object-attribute',
     executable('test-safe-init-object-attribute', ['safe-init-object-attribute.cpp'],
-        dependencies: libfpm_dep,
+        dependencies: libenum_array_dep,
     ),
 )
 
-test('fpm/enum-array/safe-init-object',
+test('gpollo/enum-array/safe-init-object',
     executable('test-safe-init-object', ['safe-init-object.cpp'],
-        dependencies: libfpm_dep,
+        dependencies: libenum_array_dep,
     ),
 )
 
-test('fpm/enum-array/safe-init-simple',
+test('gpollo/enum-array/safe-init-simple',
     executable('test-safe-init-simple', ['safe-init-simple.cpp'],
-        dependencies: libfpm_dep,
+        dependencies: libenum_array_dep,
     ),
 )
