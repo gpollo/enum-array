@@ -9,9 +9,7 @@ project(
 
 libmagic_enum_subproject = subproject('libmagic-enum')
 
-libmagic_enum_include = libmagic_enum_subproject.get_variable('libmagic_enum_include')
-
-libmagic_enum_dep = libmagic_enum_subproject.get_variable('libmagic_enum_dep')
+libmagic_enum_dep = libmagic_enum_subproject.get_variable('magic_enum_dep')
 
 ##########
 # libfpm #
