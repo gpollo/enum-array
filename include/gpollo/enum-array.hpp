@@ -182,12 +182,52 @@ class enum_array {
         pointer ptr_;
     };
 
-    iterator begin() {
+    iterator begin() noexcept {
         return iterator(&do_not_use_me_directly_[0]);
     }
 
-    iterator end() {
+    iterator end() noexcept {
         return iterator(&do_not_use_me_directly_[N]);
+    }
+
+    class const_iterator {
+       public:
+        using iterator_category = std::forward_iterator_tag;
+        using difference_type   = std::ptrdiff_t;
+        using value_type        = V;
+        using pointer           = const V*;
+        using reference         = const V&;
+
+        const_iterator(pointer ptr) : ptr_(ptr) {}
+
+        /* clang-format off */
+        reference       operator* () const { return *ptr_; }
+        pointer         operator->()       { return ptr_; }
+        const_iterator& operator++()       { ptr_++; return *this; }  
+        const_iterator  operator++(int)    { const_iterator tmp = *this; ++(*this); return tmp; }
+
+        friend bool operator== (const const_iterator& a, const const_iterator& b) { return a.ptr_ == b.ptr_; };
+        friend bool operator!= (const const_iterator& a, const const_iterator& b) { return a.ptr_ != b.ptr_; };
+        /* clang-format on */
+
+       private:
+        pointer ptr_;
+    };
+
+    const_iterator begin() const noexcept {
+        return const_iterator(&do_not_use_me_directly_[0]);
+    }
+
+    const_iterator end() const noexcept {
+        return const_iterator(&do_not_use_me_directly_[N]);
+    }
+
+    const_iterator cbegin() const noexcept {
+        return const_iterator(&do_not_use_me_directly_[0]);
+    }
+
+    const_iterator cend() const noexcept {
+        return const_iterator(&do_not_use_me_directly_[N]);
     }
 };
 
