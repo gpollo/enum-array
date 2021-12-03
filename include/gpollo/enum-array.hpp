@@ -73,6 +73,20 @@ class enum_array {
     std::array<V, N> do_not_use_me_directly_;
 
     /**
+     * Simple method that returns an array with all member initialized at the
+     * same value.
+     */
+    static enum_array<K, V> value_init(V value) {
+        enum_array<K, V> new_array;
+
+        for (unsigned int i = 0U; i < N; i++) {
+            new_array.do_not_use_me_directly_[i] = value;
+        }
+
+        return new_array;
+    }
+
+    /**
      * This method insures that all key-value pairs have been initialized
      * and that there are no duplicate key. The checks are at compile-time.
      *
