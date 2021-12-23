@@ -55,27 +55,31 @@ test('gpollo/enum-array/safe-init-different-constructors',
     ),
 )
 
-safe_init_large_object = executable('test-safe-init-large-object', ['safe-init-large-object.cpp'],
-    dependencies: libenum_array_dep,
-    cpp_args: ['-fcallgraph-info=su', '-save-temps=cwd']
-)
+if meson.get_compiler('cpp').get_id() == 'gcc'
+    if meson.get_compiler('cpp').version().split('.')[0].to_int() >= 11
+        safe_init_large_object = executable('test-safe-init-large-object', ['safe-init-large-object.cpp'],
+            dependencies: libenum_array_dep,
+            cpp_args: ['-fcallgraph-info=su', '-save-temps=cwd']
+        )
 
-test('gpollo/enum-array/safe-init-large-object', safe_init_large_object)
+        test('gpollo/enum-array/safe-init-large-object', safe_init_large_object)
 
-test('gpollo/enum-array/safe-init-large-object-check-stack',
-    check_stack_usage_sh,
-    args: [
-        '--callgraph-file',
-        '@0@'.format(meson.build_root() / 'safe-init-large-object.cpp.ci'),
-        '--function-name',
-        'main',
-        '--min-stack-usage',
-        '49400',
-        '--max-stack-usage',
-        '49600',
-    ],
-    depends: safe_init_large_object,
-)
+        test('gpollo/enum-array/safe-init-large-object-check-stack',
+            check_stack_usage_sh,
+            args: [
+                '--callgraph-file',
+                '@0@'.format(meson.build_root() / 'safe-init-large-object.cpp.ci'),
+                '--function-name',
+                'main',
+                '--min-stack-usage',
+                '49400',
+                '--max-stack-usage',
+                '49600',
+            ],
+            depends: safe_init_large_object,
+        )
+    endif
+endif
 
 test('gpollo/enum-array/safe-init-non-copyable',
     executable('test-safe-init-non-copyable', ['safe-init-non-copyable.cpp'],
